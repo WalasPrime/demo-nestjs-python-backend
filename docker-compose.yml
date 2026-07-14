@@ -1,0 +1,10 @@
+services:
+  workspace:
+    image: node:26
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: sleep infinity
+  api:
+    build:
+      context: apps/api
