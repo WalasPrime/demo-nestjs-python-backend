@@ -9,4 +9,4 @@ RUN npm install
 FROM dependencies-all AS development
 COPY . .
 
-CMD ["npm" "run" "start:dev"]
+CMD npm run start:dev

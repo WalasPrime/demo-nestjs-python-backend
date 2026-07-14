@@ -8,3 +8,10 @@ services:
   api:
     build:
       context: apps/api
+    ports:
+      - 3000:3000
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - 5672:5672
+      - 15672:15672
