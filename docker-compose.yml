@@ -10,6 +10,9 @@ services:
       context: apps/api
     ports:
       - 3000:3000
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
   rabbitmq:
     image: rabbitmq:4-management
     ports:

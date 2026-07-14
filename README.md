@@ -12,3 +12,4 @@ This project was coded manually, with occasional AI assist and serves as a skill
 2. I followed [https://docs.nestjs.com/cli/overview](https://docs.nestjs.com/cli/overview), did `npm install -g @nestjs/cli` and `nest new apps/api` to bootstrap a NestJS project (I know the boilerplate well and always use it).
 3. I created a Dockerfile for the `apps/api` subproject and added it as service `api` to the docker-compose.yml stack - now we have a Hello World HTTP project at localhost:3000 with no coding yet.
 4. I started to track some design considerations in `apps/api/adr`, starting with [01-cpu-scaling](./apps/api/adr/01-cpu-scaling.md).
+5. After some research - I decided to go ahead with RabbitMQ and the existing support for it via `@nestjs/microservices`. Adding the first dependency also requires some ability to provide runtime configuration, so I utilized `@nestjs/config` which utilizes `dotenv`.
