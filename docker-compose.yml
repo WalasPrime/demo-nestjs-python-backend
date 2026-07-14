@@ -4,7 +4,12 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
-    command: sleep infinity
+  uv:
+    image: ghcr.io/astral-sh/uv:python3.14-trixie
+    entrypoint: ["uv"]
+    volumes:
+      - .:/workspace
+    working_dir: /workspace/apps/worker
   api:
     build:
       context: apps/api
@@ -13,6 +18,24 @@ services:
     volumes:
       - ./apps/api:/app
       - /app/node_modules
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    init: true
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
+  worker:
+    build:
+      context: apps/worker
+    volumes:
+      - ./apps/worker:/app
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
   rabbitmq:
     image: rabbitmq:4-management
     ports:

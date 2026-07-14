@@ -12,7 +12,7 @@ export const RabbitMQClient = Symbol('RabbitMQClient');
           transport: Transport.RMQ,
           // TODO: Use the ConfigService
           options: {
-            urls: ['amqp://rabbitmq:5672'],
+            urls: [process.env.RABBITMQ_URL ?? ''],
             queue: 'jobs',
             queueOptions: { durable: true },
           },
