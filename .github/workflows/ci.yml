@@ -38,10 +38,13 @@ jobs:
       - name: Wait for tests
         wait-all:
       
+      - name: Fetch Swagger JSON
+        run: curl -o swagger.json http://localhost:3000/docs-json
+
       - name: Build Swagger UI static site
         uses: Legion2/swagger-ui-action@v1.3.0
         with:
-          spec-url: http://localhost:3000/docs-json
+          spec-file: swagger.json
           output: swagger-ui
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
