@@ -3,8 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - '*'
 
 jobs:
   tests:
@@ -16,6 +15,9 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Warmup the Docker Compose stack
+        run: docker compose up -d --wait
 
       - name: Run API test suite
         background: true
@@ -31,7 +33,7 @@ jobs:
       
       - name: Run Worker test suite
         background: true
-        run: docker compose run --rm worker pytest -v
+        run: docker compose exec --rm worker pytest -v
 
       - name: Wait for tests
         wait-all: 
