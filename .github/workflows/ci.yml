@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run API test suite
+        background: true
+        run: docker compose run --rm api npm test
+      
+      - name: Run API E2E test suite
+        background: true
+        run: docker compose run --rm api npm run test:e2e
+      
+      - name: Run API linting
+        background: true
+        run: docker compose run --rm api npm run lint
+      
+      - name: Run Worker test suite
+        background: true
+        run: docker compose run --rm worker pytest -v
+
+      - name: Wait for tests
+        wait-all: 
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker compose down --remove-orphans
