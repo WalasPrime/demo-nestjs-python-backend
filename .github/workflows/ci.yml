@@ -33,7 +33,7 @@ jobs:
       
       - name: Run Worker test suite
         background: true
-        run: docker compose exec --rm worker pytest -v
+        run: docker compose exec worker uv run python -m pytest
 
       - name: Wait for tests
         wait-all: 
