@@ -38,19 +38,18 @@ jobs:
       - name: Wait for tests
         wait-all:
       
-      - name: Generate Swagger documentation
-        run: curl -o swagger.json http://localhost:3000/docs-json
-      
       - name: Build Swagger UI static site
-        uses: peter-evans/swagger-github-pages@v2
+        uses: Legion2/swagger-ui-action@v1.3.0
         with:
-          spec-file: swagger.json
+          spec-url: http://localhost:3000/docs-json
+          output: swagger-ui
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./swagger-ui
+          publish_dir: swagger-ui
 
       - name: Tear down Docker Compose
         if: always()
