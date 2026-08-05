@@ -36,7 +36,21 @@ jobs:
         run: docker compose exec worker uv run python -m pytest
 
       - name: Wait for tests
-        wait-all: 
+        wait-all:
+      
+      - name: Generate Swagger documentation
+        run: curl -o swagger.json http://localhost:3000/docs-json
+      
+      - name: Build Swagger UI static site
+        uses: peter-evans/swagger-github-pages@v2
+        with:
+          spec-file: swagger.json
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./swagger-ui
 
       - name: Tear down Docker Compose
         if: always()
