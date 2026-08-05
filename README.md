@@ -1,5 +1,7 @@
 # Demo app: A backend utilizing Node.js, Python and MongoDB
 
+[![CI](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml)
+
 This is a personal lab project with the goal of demonstrating a use case where Node.js is used as an HTTP API as an ingest layer that orchestrates jobs to Python workers.
 
 Python is a popular choice for AI workloads, while Node.js performs well when processing data streams - like HTTP traffic.
