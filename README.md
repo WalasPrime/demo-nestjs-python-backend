@@ -1,6 +1,6 @@
 # Demo app: A backend utilizing Node.js, Python and MongoDB
 
-[![CI](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml)
+[![CI](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/pages-docs-blue?logo=github)](https://walasprime.github.io/demo-nestjs-python-backend/)
 
 This is a personal lab project with the goal of demonstrating a use case where Node.js is used as an HTTP API as an ingest layer that orchestrates jobs to Python workers.
 
