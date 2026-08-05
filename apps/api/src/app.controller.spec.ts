@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DispatcherService } from './modules/dispatcher/dispatcher.service';
+import { dispatcherServiceMock } from './modules/dispatcher/dispatcher.mock';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,15 +10,21 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [
+        AppService,
+        {
+          provide: DispatcherService,
+          useValue: dispatcherServiceMock,
+        },
+      ],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Hello World!"', async () => {
+      await expect(appController.getHello()).resolves.toBe('Hello World!');
     });
   });
 });
