@@ -6,9 +6,7 @@ export class SwaggerService {
   initialize(app: INestApplication) {
     const config = new DocumentBuilder()
       .setTitle('demo-nestjs-python-backend')
-      .setDescription(
-        'API of the NestJS + Python demo project',
-      )
+      .setDescription('API of the NestJS + Python demo project')
       .setVersion('1.0')
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
