@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DispatcherService } from './modules/dispatcher/dispatcher.service';
+import { JobMessage } from './modules/schemas/jobs';
 
 @Injectable()
 export class AppService {
@@ -9,10 +10,12 @@ export class AppService {
   ) {}
 
   async getHello(): Promise<string> {
-    await this.dispatcherService.dispatchJob({
+    const exampleJob: JobMessage = {
       task: 'example',
       payload: { data: 'sample' },
-    });
+    };
+
+    await this.dispatcherService.dispatchJob(exampleJob);
 
     return 'Hello World!';
   }
