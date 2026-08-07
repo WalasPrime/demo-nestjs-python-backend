@@ -1,0 +1,9 @@
+# ADR 03: Message schemas
+
+Problem: Multiple subprojects (api and worker) want to exchange messages, but they should have a way to validate the shape of them to ensure that they don't reach for fields that don't exist yet, or don't exist anymore (for example due to deployments, donwtime, rollbacks or other circumstances).
+
+Available options: (high level) scope schema knowledge on a subproject basis, or make schema knowledge global; (for subproject scoping) create an additional subproject with schema definitions compatible with both Python and Node.js (eg. JSON schema or even Protobuf) and provide automation to use and validate them.
+
+Decision: Scope schema knowledge to each sub-project separately.
+
+Reasoning: Since the api and workers are designed to be scaled independently - they would also have separate deployment pipelines, so during a no-downtime deployment there could be situations where both an older and a newer version of a worker (or the api) is live. This extra consideration might become hidden if the problem of this ADR is automated away. Backwards (and forwards) compatibility can't be easily guaranteed unless Protobuf is used (which would be overkill for most web-based projects anyway - messages should remain as plain JSON objects, so JSON schema is a natural fit). TypeScript has `zod` which can generate JSON schemas but loading from them is experimental, while Python has `pydantic` which can generate JSON schemas too, but not load them (intentionally). Schemas can't be determined in runtime, but have to be `baked in`. Consistency can be maintained manually, with some automation opportunity available _in the future_ if project scope grows.
