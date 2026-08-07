@@ -4,11 +4,11 @@ from unittest.mock import Mock
 from src.worker.task_handler import process_task
 
 
-def test_process_task_publishes_result_and_acknowledges():
+def test_process_task_publishes_result_for_envelope_payload():
     channel = Mock()
     method = Mock(delivery_tag="dummy-tag")
     properties = Mock()
-    body = b'{"type": "example", "payload": {"data": "hello"}}'
+    body = b'{"pattern": "job_queue", "data": {"type": "example", "payload": {"data": "sample"}}}'
 
     process_task(channel, method, properties, body)
 
@@ -20,7 +20,7 @@ def test_process_task_publishes_result_and_acknowledges():
                 "status": "done",
                 "data": {
                     "type": "example",
-                    "payload": {"data": "hello"},
+                    "payload": {"data": "sample"},
                 },
             }
         ),
