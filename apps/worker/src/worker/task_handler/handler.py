@@ -3,7 +3,7 @@ import logging
 
 from src.worker.task_handler.models import (
     DoneResultMessage,
-    JobMessageAdapter,
+    JobEnvelopeAdapter,
     ResultMessageAdapter,
 )
 
@@ -12,17 +12,29 @@ def process_task(ch, method, properties, body):
     body_text = body.decode()
     logging.info(f"Received task: {body_text}")
 
-    task = JobMessageAdapter.validate_json(body_text)
-    result_model = DoneResultMessage(status="done", data=task.model_dump())
-    validated_result = ResultMessageAdapter.validate_python(result_model.model_dump())
+    try:
+        payload = json.loads(body_text)
+        envelope = JobEnvelopeAdapter.validate_python(payload)
+        task = envelope.data
 
-    ch.basic_publish(
-        exchange="",
-        routing_key="results",
-        body=json.dumps(validated_result.model_dump()),
-        # properties=pika.BasicProperties(correlation_id=properties.correlation_id)
-    )
-    ch.basic_ack(delivery_tag=method.delivery_tag)
-    logging.info(
-        f"Processed task: {task.model_dump()} and sent result: {validated_result.model_dump()}"
-    )
+        result_model = DoneResultMessage(status="done", data=task.model_dump())
+        validated_result = ResultMessageAdapter.validate_python(result_model.model_dump())
+
+        ch.basic_publish(
+            exchange="",
+            routing_key="results",
+            body=json.dumps(validated_result.model_dump()),
+            # properties=pika.BasicProperties(correlation_id=properties.correlation_id)
+        )
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        logging.info(
+            f"Processed task: {task.model_dump()} and sent result: {validated_result.model_dump()}"
+        )
+    except Exception:
+        logging.exception(
+            f"Failed to process task: {body_text}"
+        )
+        try:
+            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+        except Exception:
+            logging.debug("basic_nack is unavailable; leaving message unacked.")

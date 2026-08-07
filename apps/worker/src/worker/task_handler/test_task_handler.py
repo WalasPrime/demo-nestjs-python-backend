@@ -26,3 +26,16 @@ def test_process_task_publishes_result_and_acknowledges():
         ),
     )
     channel.basic_ack.assert_called_once_with(delivery_tag="dummy-tag")
+
+
+def test_process_task_invalid_message_does_not_ack_and_requeues():
+    channel = Mock()
+    method = Mock(delivery_tag="invalid-tag")
+    properties = Mock()
+    body = b'{"type": "unknown", "payload": {"data": 123}}'
+
+    process_task(channel, method, properties, body)
+
+    channel.basic_ack.assert_not_called()
+    channel.basic_publish.assert_not_called()
+    channel.basic_nack.assert_called_once_with(delivery_tag="invalid-tag", requeue=True)
