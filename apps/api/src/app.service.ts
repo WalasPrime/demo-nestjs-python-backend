@@ -11,7 +11,7 @@ export class AppService {
 
   async getHello(): Promise<string> {
     const exampleJob: JobMessage = {
-      task: 'example',
+      type: 'example',
       payload: { data: 'sample' },
     };
 
