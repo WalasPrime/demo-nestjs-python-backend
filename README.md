@@ -1,4 +1,4 @@
-# Demo app: A backend utilizing Node.js, Python and MongoDB
+# Demo app: A backend utilizing Node.js, Python and RabbitMQ
 
 [![CI](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/WalasPrime/demo-nestjs-python-backend/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/pages-docs-blue?logo=github)](https://walasprime.github.io/demo-nestjs-python-backend/)
 
