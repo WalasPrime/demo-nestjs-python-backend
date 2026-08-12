@@ -1,8 +1,6 @@
 from .job import (
     ExampleJobMessage,
     ExampleJobPayload,
-    JobEnvelope,
-    JobEnvelopeAdapter,
     JobMessage,
     JobMessageAdapter,
 )
@@ -12,8 +10,6 @@ __all__ = [
     "ExampleJobMessage",
     "ExampleJobPayload",
     "DoneResultMessage",
-    "JobEnvelope",
-    "JobEnvelopeAdapter",
     "JobMessage",
     "JobMessageAdapter",
     "ResultMessage",

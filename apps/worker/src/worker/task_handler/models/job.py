@@ -18,19 +18,9 @@ JobMessage = Annotated[Union[ExampleJobMessage], Field(discriminator="type")]
 JobMessageAdapter = TypeAdapter(JobMessage)
 
 
-class JobEnvelope(BaseModel):
-    pattern: str
-    data: JobMessage
-
-
-JobEnvelopeAdapter = TypeAdapter(JobEnvelope)
-
-
 __all__ = [
     "ExampleJobMessage",
     "ExampleJobPayload",
-    "JobEnvelope",
-    "JobEnvelopeAdapter",
     "JobMessage",
     "JobMessageAdapter",
 ]

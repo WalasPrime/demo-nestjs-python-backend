@@ -8,7 +8,7 @@ def test_process_task_publishes_result_for_envelope_payload():
     channel = Mock()
     method = Mock(delivery_tag="dummy-tag")
     properties = Mock()
-    body = b'{"pattern": "job_queue", "data": {"type": "example", "payload": {"data": "sample"}}}'
+    body = b'{"type": "example", "payload": {"data": "sample"}}'
 
     process_task(channel, method, properties, body)
 

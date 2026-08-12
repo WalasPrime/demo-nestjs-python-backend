@@ -3,7 +3,7 @@ import logging
 
 from src.worker.task_handler.models import (
     DoneResultMessage,
-    JobEnvelopeAdapter,
+    JobMessageAdapter,
     ResultMessageAdapter,
 )
 
@@ -14,8 +14,7 @@ def process_task(ch, method, properties, body):
 
     try:
         payload = json.loads(body_text)
-        envelope = JobEnvelopeAdapter.validate_python(payload)
-        task = envelope.data
+        task = JobMessageAdapter.validate_python(payload)
 
         result_model = DoneResultMessage(status="done", data=task.model_dump())
         validated_result = ResultMessageAdapter.validate_python(result_model.model_dump())
