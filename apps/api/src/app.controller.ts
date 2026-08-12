@@ -11,7 +11,7 @@ export class AppController {
     description:
       'Returns a greeting message, and dispatches a job to the worker job queue.',
   })
-  getHello(): Promise<string> {
+  getHello() {
     return this.appService.getHello();
   }
 }
