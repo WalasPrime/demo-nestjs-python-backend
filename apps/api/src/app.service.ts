@@ -9,13 +9,13 @@ export class AppService {
     private readonly dispatcherService: DispatcherService,
   ) {}
 
-  async getHello(): Promise<string> {
+  getHello() {
     const exampleJob: JobMessage = {
       type: 'example',
       payload: { data: 'sample' },
     };
 
-    await this.dispatcherService.dispatchJob(exampleJob);
+    this.dispatcherService.dispatchJob(exampleJob);
 
     return 'Hello World!';
   }

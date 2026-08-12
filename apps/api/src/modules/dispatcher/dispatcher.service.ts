@@ -1,35 +1,25 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  OnApplicationBootstrap,
-  OnApplicationShutdown,
-} from '@nestjs/common';
-import { RabbitMQClient } from '../rabbitmq/rabbitmq.module';
-import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 
 @Injectable()
-export class DispatcherService
-  implements OnApplicationBootstrap, OnApplicationShutdown
-{
-  constructor(@Inject(RabbitMQClient) private readonly client: ClientProxy) {}
+export class DispatcherService implements OnApplicationBootstrap {
+  constructor(private readonly client: RabbitMQService) {}
 
-  async dispatchJob(job: any): Promise<void> {
+  dispatchJob(job: any) {
     Logger.debug(
       `Dispatching job: ${JSON.stringify(job)}`,
       'DispatcherService',
     );
-    await lastValueFrom(this.client.emit('job_queue', job));
+
+    this.client.sendJob(JSON.stringify(job));
   }
 
-  async onApplicationBootstrap() {
-    await this.client.connect();
-    Logger.debug(`Connected to RabbitMQ`, 'DispatcherService');
-  }
-
-  async onApplicationShutdown() {
-    Logger.debug(`Closing broker connection`, 'DispatcherService');
-    await this.client.close();
+  onApplicationBootstrap() {
+    this.client.subscribeResults(async (result) => {
+      Logger.debug(
+        `Got result: ${JSON.stringify(result)}`,
+        'DispatcherService',
+      );
+    });
   }
 }
