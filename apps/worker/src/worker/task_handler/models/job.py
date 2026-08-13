@@ -11,6 +11,7 @@ class ExampleJobPayload(BaseModel):
 
 class ExampleJobMessage(BaseModel):
     type: Literal["example"]
+    id: str
     payload: ExampleJobPayload
 
 

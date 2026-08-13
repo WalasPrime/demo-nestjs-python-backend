@@ -16,7 +16,7 @@ def process_task(ch, method, properties, body):
         payload = json.loads(body_text)
         task = JobMessageAdapter.validate_python(payload)
 
-        result_model = DoneResultMessage(status="done", data=task.model_dump())
+        result_model = DoneResultMessage(status="done", id=task.id, data=task.model_dump())
         validated_result = ResultMessageAdapter.validate_python(result_model.model_dump())
 
         ch.basic_publish(
