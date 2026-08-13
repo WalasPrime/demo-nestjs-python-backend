@@ -8,7 +8,7 @@ def test_process_task_publishes_result_for_envelope_payload():
     channel = Mock()
     method = Mock(delivery_tag="dummy-tag")
     properties = Mock()
-    body = b'{"type": "example", "payload": {"data": "sample"}}'
+    body = b'{"type": "example", "id": "abc123", "payload": {"data": "sample"}}'
 
     process_task(channel, method, properties, body)
 
@@ -18,8 +18,10 @@ def test_process_task_publishes_result_for_envelope_payload():
         body=json.dumps(
             {
                 "status": "done",
+                "id": "abc123",
                 "data": {
                     "type": "example",
+                    "id": "abc123",
                     "payload": {"data": "sample"},
                 },
             }
