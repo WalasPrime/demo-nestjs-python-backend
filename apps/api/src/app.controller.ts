@@ -14,4 +14,13 @@ export class AppController {
   getHello() {
     return this.appService.getHello();
   }
+
+  @Get('example-job')
+  @ApiBody({
+    description:
+      'Dispatches an example job, waits for the result payload and returns it.',
+  })
+  getExample() {
+    return this.appService.exampleJob();
+  }
 }

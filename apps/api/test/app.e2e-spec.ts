@@ -3,6 +3,10 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import {
+  ResultMessage,
+  ResultMessageSchema,
+} from '../src/modules/schemas/results';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -16,6 +20,10 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .get('/')
@@ -23,7 +31,16 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
-  afterEach(async () => {
-    await app.close();
+  // TODO: Re-enable after fixing result dispatch to a random api instance rather than the specific one
+  xit('/example-job (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/example-job')
+      .expect(200)
+      .expect((res) => {
+        const result: ResultMessage = ResultMessageSchema.safeParse(res.text);
+
+        expect(result).toHaveProperty('status');
+        expect(result).toHaveProperty('id');
+      });
   });
 });

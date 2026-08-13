@@ -19,4 +19,15 @@ export class AppService {
 
     return 'Hello World!';
   }
+
+  async exampleJob() {
+    const job: JobMessage = {
+      type: 'example',
+      payload: { data: 'sample' },
+    };
+
+    const result = await this.dispatcherService.dispatchJobAndWait(job);
+
+    return result;
+  }
 }
