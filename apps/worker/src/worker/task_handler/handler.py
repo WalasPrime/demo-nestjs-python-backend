@@ -20,14 +20,14 @@ def process_task(ch, method, properties, body):
         validated_result = ResultMessageAdapter.validate_python(result_model.model_dump())
 
         ch.basic_publish(
-            exchange="",
-            routing_key="results",
+            exchange="results_exchange",
+            routing_key=task.replyTo,
             body=json.dumps(validated_result.model_dump()),
             # properties=pika.BasicProperties(correlation_id=properties.correlation_id)
         )
         ch.basic_ack(delivery_tag=method.delivery_tag)
         logging.info(
-            f"Processed task: {task.model_dump()} and sent result: {validated_result.model_dump()}"
+            f"Processed task: {task.model_dump()} and sent result to {task.replyTo}: {validated_result.model_dump()}"
         )
     except Exception:
         logging.exception(

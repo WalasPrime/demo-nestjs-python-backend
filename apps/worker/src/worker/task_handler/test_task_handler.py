@@ -8,13 +8,13 @@ def test_process_task_publishes_result_for_envelope_payload():
     channel = Mock()
     method = Mock(delivery_tag="dummy-tag")
     properties = Mock()
-    body = b'{"type": "example", "id": "abc123", "payload": {"data": "sample"}}'
+    body = b'{"type": "example", "id": "abc123", "replyTo": "def456", "payload": {"data": "sample"}}'
 
     process_task(channel, method, properties, body)
 
     channel.basic_publish.assert_called_once_with(
-        exchange="",
-        routing_key="results",
+        exchange="results_exchange",
+        routing_key="def456",
         body=json.dumps(
             {
                 "status": "done",
@@ -22,6 +22,7 @@ def test_process_task_publishes_result_for_envelope_payload():
                 "data": {
                     "type": "example",
                     "id": "abc123",
+                    "replyTo": "def456",
                     "payload": {"data": "sample"},
                 },
             }
