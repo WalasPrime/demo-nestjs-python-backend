@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @ApiBody({
+  @ApiOkResponse({
     description:
       'Returns a greeting message, and dispatches a job to the worker job queue.',
   })
@@ -16,7 +16,7 @@ export class AppController {
   }
 
   @Get('example-job')
-  @ApiBody({
+  @ApiOkResponse({
     description:
       'Dispatches an example job, waits for the result payload and returns it.',
   })
