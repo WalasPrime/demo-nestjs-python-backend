@@ -67,7 +67,7 @@ export class DispatcherService
     );
     job.id = id;
 
-    this.client.sendJob(JSON.stringify(job));
+    this.client.sendJob(job);
     this.pendingDispatches[id] = new EventEmitter2();
 
     return id;

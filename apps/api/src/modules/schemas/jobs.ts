@@ -6,6 +6,7 @@ export const JobMessageSchema = z.discriminatedUnion('type', [
   z.object({
     type: JobMessageTypeEnum.extract(['example']),
     id: z.string().optional(),
+    replyTo: z.string().optional(),
     payload: z.object({
       data: z.string(),
     }),

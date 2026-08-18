@@ -32,14 +32,16 @@ describe('AppController (e2e)', () => {
   });
 
   // TODO: Re-enable after fixing result dispatch to a random api instance rather than the specific one
-  xit('/example-job (GET)', () => {
+  it('/example-job (GET)', () => {
     return request(app.getHttpServer())
       .get('/example-job')
       .expect(200)
       .expect((res) => {
-        const result: ResultMessage = ResultMessageSchema.safeParse(res.text);
+        const result: ResultMessage = ResultMessageSchema.parse(
+          JSON.parse(res.text),
+        );
 
-        expect(result).toHaveProperty('status');
+        expect(result).toHaveProperty('status', 'done');
         expect(result).toHaveProperty('id');
       });
   });
