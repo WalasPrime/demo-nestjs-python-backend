@@ -16,7 +16,7 @@ The project can be easily run using Docker, which enables scaling the Python wor
 docker compose up -d --scale worker=4
 ```
 
-Then, after accessing [localhost:3000](https://localhost:3000/example-job) you'll see a job result payload, and you can check your logs for trace of jobs being dispatched and handled across the services:
+Then, after accessing [localhost:3000/example-job](http://localhost:3000/example-job) you'll see a job result payload, and you can check your logs for trace of jobs being dispatched and handled across the services:
 
 ```bash
 docker compose logs --tail 100 -f
