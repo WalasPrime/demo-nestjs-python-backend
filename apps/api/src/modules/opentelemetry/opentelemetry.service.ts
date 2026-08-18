@@ -2,7 +2,6 @@ import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
-import { AmqplibInstrumentation } from '@opentelemetry/instrumentation-amqplib';
 
 @Injectable()
 export class OpenTelemetryService implements OnApplicationShutdown {
@@ -13,10 +12,7 @@ export class OpenTelemetryService implements OnApplicationShutdown {
     const sdk = new NodeSDK({
       traceExporter,
       serviceName: 'api',
-      instrumentations: [
-        getNodeAutoInstrumentations(),
-        new AmqplibInstrumentation(),
-      ],
+      instrumentations: [getNodeAutoInstrumentations()],
     });
 
     sdk.start();

@@ -5,6 +5,7 @@ import {
   OnApplicationShutdown,
 } from '@nestjs/common';
 import * as amqplib from 'amqplib';
+import { context, propagation } from '@opentelemetry/api';
 import { ResultMessage, ResultMessageSchema } from '../schemas/results';
 import { JobMessage } from '../schemas/jobs';
 import { Traceable } from 'nestjs-otel';
@@ -58,9 +59,13 @@ export class RabbitMQService
   }
 
   sendJob(payload: JobMessage) {
+    const headers: Record<string, string> = {};
+    propagation.inject(context.active(), headers);
+
     this.jobsChannel?.sendToQueue(
       'jobs',
       Buffer.from(JSON.stringify({ ...payload, replyTo: this.instanceId })),
+      { headers },
     );
   }
 
@@ -76,7 +81,11 @@ export class RabbitMQService
             const resultMessage: ResultMessage = ResultMessageSchema.parse(
               JSON.parse(content),
             );
-            await onMessage(resultMessage);
+            const parentContext = propagation.extract(
+              context.active(),
+              msg.properties.headers ?? {},
+            );
+            await context.with(parentContext, () => onMessage(resultMessage));
             this.resultsChannel?.ack(msg);
           }
         } catch (err) {
