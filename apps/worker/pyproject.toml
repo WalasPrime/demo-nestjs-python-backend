@@ -9,6 +9,9 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "pytest>=8.0.0",
     "pydantic>=2.13.4",
+    "opentelemetry-api>=1.44.0",
+    "opentelemetry-sdk>=1.44.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.44.0",
 ]
 
 [dependency-groups]

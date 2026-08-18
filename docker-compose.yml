@@ -32,6 +32,9 @@ services:
       - ./apps/worker:/app
     environment:
       - RABBITMQ_URL=amqp://rabbitmq:5672
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_SERVICE_NAME=worker
     depends_on:
       rabbitmq:
         condition: service_healthy
