@@ -10,10 +10,10 @@ This project was coded manually, with occasional AI assist and serves as a skill
 
 ## Usage
 
-The project can be easily run using Docker, which enables scaling the Python workers easily:
+The project can be easily run using Docker, which enables scaling the Python and API workers easily:
 
 ```bash
-docker compose up -d --scale worker=4
+docker compose up -d --scale worker=4 --scale api=2
 ```
 
 Then, after accessing [localhost:3000/example-job](http://localhost:3000/example-job) you'll see a job result payload, and you can check your logs for trace of jobs being dispatched and handled across the services:
@@ -22,7 +22,7 @@ Then, after accessing [localhost:3000/example-job](http://localhost:3000/example
 docker compose logs --tail 100 -f
 ```
 
-Keep refreshing the page to dispatch more jobs - they should be received by random workers each time.
+Keep refreshing the page to dispatch more jobs - they should be received by random workers each time. The payload itself will contain a `replyTo` with an API instance id that will change depending on how many `api` instances you spawned. You can take a look at the `jaeger` UI at [localhost:16686](http://localhost:16686/) to gain some insight into the app operation (very limited at this time).
 
 ## Development process
 
@@ -40,3 +40,4 @@ Keep refreshing the page to dispatch more jobs - they should be received by rand
 12. I decided to address the fact that we don't really do anything with the worker result, so I modified the [dispatcher](./apps/api/src/modules/dispatcher/dispatcher.service.ts) to assign job identifiers and to track dispatched jobs to expose an easy _dispatch-and-await_ interface for the rest of the codebase. As a result, a new `/example-job` endpoint is available. This still does not address the fact that results are randomly passed just to a single api instance - which is problematic even if the app is running and we start some E2E tests at the same time.
 13. Time to address the result queue issue. To fix this I'll utilize a more complex RabbitMQ setup that utilizes exchanges, bindings and temporary queues. At this point I could also introduce Traefik and provide instructions on how to scale the API workers as well. I'll keep this in mind in case I have time to expand the scope of this project.
 14. I'd like to expand more into the Python worker package. I've decided to adopt `ruff` and `mypy` for static code analysis. I had to immediately fix some issues, and then adjust the CI to run the tools.
+15. I played around with the idea to scale the API service as well. To enable this, the stack needs a reverse proxy. I have experience with `traefik` so I adopted it here. I was also thinking about presenting a way to observe how the app behaves. I managed to get `jaeger` working in the stack as well. For now, just the requests are opaquely visible, but since it's all based on OpenTelemetry these days, I can provide more transparency into the app logic in the future.

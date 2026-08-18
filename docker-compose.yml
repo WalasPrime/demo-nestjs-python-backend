@@ -2,8 +2,6 @@ services:
   api:
     build:
       context: apps/api
-    ports:
-      - 3000:3000
     volumes:
       - ./apps/api:/app
       - /app/node_modules
@@ -19,6 +17,10 @@ services:
       timeout: 30s
       retries: 3
       start_period: 15s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
+      - "traefik.http.routers.api.rule=PathPrefix(`/`)"
 
   worker:
     build:
@@ -42,3 +44,34 @@ services:
       timeout: 30s
       retries: 3
       start_period: 30s
+
+  traefik:
+    image: traefik:3.7
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--tracing=true"
+      - "--tracing.otlp.http=true"
+      - "--tracing.otlp.http.endpoint=http://jaeger:4318/v1/traces"
+    ports:
+      - 3000:80
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      api:
+        condition: service_healthy
+
+  jaeger:
+    image: jaegertracing/jaeger:2.20.0
+    ports:
+      - 16686:16686
+      - 16687:16687
+      - 4317:4317
+      - 4318:4318
