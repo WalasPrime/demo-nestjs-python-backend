@@ -7,8 +7,10 @@ import {
 import * as amqplib from 'amqplib';
 import { ResultMessage, ResultMessageSchema } from '../schemas/results';
 import { JobMessage } from '../schemas/jobs';
+import { Traceable } from 'nestjs-otel';
 
 @Injectable()
+@Traceable()
 export class RabbitMQService
   implements OnApplicationBootstrap, OnApplicationShutdown
 {

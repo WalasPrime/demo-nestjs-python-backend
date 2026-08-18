@@ -8,6 +8,7 @@ import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 import { JobMessage } from '../schemas/jobs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ResultMessage } from '../schemas/results';
+import { Traceable } from 'nestjs-otel';
 
 export type JobIdentifier = string;
 type DispatchMap = { [key: string]: EventEmitter2 };
@@ -15,6 +16,7 @@ type DispatchMap = { [key: string]: EventEmitter2 };
 export class DispatchAbortedError extends Error {}
 
 @Injectable()
+@Traceable()
 export class DispatcherService
   implements OnApplicationBootstrap, OnApplicationShutdown
 {
