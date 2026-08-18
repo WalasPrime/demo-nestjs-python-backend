@@ -1,16 +1,19 @@
 import json
 import logging
 
-from src.worker.task_handler.models import (
+import pika
+
+from worker.task_handler.models import (
     DoneResultMessage,
     JobMessageAdapter,
     ResultMessageAdapter,
 )
 
+logger = logging.getLogger(__name__)
 
 def process_task(ch, method, properties, body):
     body_text = body.decode()
-    logging.info(f"Received task: {body_text}")
+    logger.info(f"Received task: {body_text}")
 
     try:
         payload = json.loads(body_text)
@@ -26,14 +29,14 @@ def process_task(ch, method, properties, body):
             # properties=pika.BasicProperties(correlation_id=properties.correlation_id)
         )
         ch.basic_ack(delivery_tag=method.delivery_tag)
-        logging.info(
+        logger.info(
             f"Processed task: {task.model_dump()} and sent result to {task.replyTo}: {validated_result.model_dump()}"
         )
     except Exception:
-        logging.exception(
+        logger.exception(
             f"Failed to process task: {body_text}"
         )
         try:
             ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
-        except Exception:
-            logging.debug("basic_nack is unavailable; leaving message unacked.")
+        except pika.exceptions.AMQPError:
+            logger.debug("basic_nack is unavailable; leaving message unacked.")

@@ -10,3 +10,17 @@ dependencies = [
     "pytest>=8.0.0",
     "pydantic>=2.13.4",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.1",
+    "ruff>=0.16.3",
+]
+
+[tool.mypy]
+files = ["src"]
+mypy_path = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["pika", "pika.*"]
+ignore_missing_imports = true

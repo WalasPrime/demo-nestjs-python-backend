@@ -1,7 +1,7 @@
 import json
 from unittest.mock import Mock
 
-from src.worker.task_handler import process_task
+from worker.task_handler import process_task
 
 
 def test_process_task_publishes_result_for_envelope_payload():

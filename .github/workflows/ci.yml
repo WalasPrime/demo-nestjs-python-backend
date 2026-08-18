@@ -35,6 +35,14 @@ jobs:
         background: true
         run: docker compose exec worker uv run python -m pytest
 
+      - name: Run Worker linting
+        background: true
+        run: docker compose exec worker uv run ruff check .
+      
+      - name: Run Worker type checking
+        background: true
+        run: docker compose exec worker uv run mypy worker
+
       - name: Wait for tests
         wait-all:
       

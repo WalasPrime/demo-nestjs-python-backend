@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Annotated, Literal, Union
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, TypeAdapter
 
@@ -11,7 +11,7 @@ class DoneResultMessage(BaseModel):
     data: Any
 
 
-ResultMessage = Annotated[Union[DoneResultMessage], Field(discriminator="status")]
+ResultMessage = Annotated[DoneResultMessage, Field(discriminator="status")]
 ResultMessageAdapter = TypeAdapter(ResultMessage)
 
 

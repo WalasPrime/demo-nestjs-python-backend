@@ -7,9 +7,9 @@ from .job import (
 from .result import DoneResultMessage, ResultMessage, ResultMessageAdapter
 
 __all__ = [
+    "DoneResultMessage",
     "ExampleJobMessage",
     "ExampleJobPayload",
-    "DoneResultMessage",
     "JobMessage",
     "JobMessageAdapter",
     "ResultMessage",

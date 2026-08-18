@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, TypeAdapter
 
@@ -16,7 +16,7 @@ class ExampleJobMessage(BaseModel):
     payload: ExampleJobPayload
 
 
-JobMessage = Annotated[Union[ExampleJobMessage], Field(discriminator="type")]
+JobMessage = Annotated[ExampleJobMessage, Field(discriminator="type")]
 JobMessageAdapter = TypeAdapter(JobMessage)
 
 
