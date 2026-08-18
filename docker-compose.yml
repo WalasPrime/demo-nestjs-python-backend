@@ -7,6 +7,9 @@ services:
       - /app/node_modules
     environment:
       - RABBITMQ_URL=amqp://rabbitmq:5672
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_SERVICE_NAME=api
     init: true
     depends_on:
       rabbitmq:

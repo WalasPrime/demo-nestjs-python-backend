@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { DispatcherModule } from './modules/dispatcher/dispatcher.module';
 import { SwaggerModule } from './modules/swagger/swagger.module';
+import { OpenTelemetryModule } from './modules/opentelemetry/opentelemetry.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SwaggerModule } from './modules/swagger/swagger.module';
     }),
     DispatcherModule,
     SwaggerModule,
+    OpenTelemetryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
